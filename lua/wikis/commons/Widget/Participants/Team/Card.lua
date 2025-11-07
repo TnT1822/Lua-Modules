@@ -1,3 +1,4 @@
+---
 -- @Liquipedia
 -- page=Module:Widget/Participants/Team/Card
 --
@@ -21,49 +22,42 @@ local ParticipantsTeamCard = Class.new(Widget)
 ---@return Widget
 function ParticipantsTeamCard:render()
 	local participant = self.props.participant
-	local variant = self.props.variant or 'compact'
 
-	local qualifierBox = self:_renderQualifierBox(participant)
+	local qualifierBoxHeader = self:_renderQualifierBox(participant, 'header')
+	local qualifierBoxContent = self:_renderQualifierBox(participant, 'content')
 	local content = { self:_renderContent(participant) }
 
 	local header = ParticipantsTeamHeader{
 		participant = participant,
-		variant = variant
 	}
 
 	local collapsible = Collapsible{
 		shouldCollapse = true,
 		collapseAreaClasses = {'team-participant-card-collapsible-content'},
-		classes = {'team-participant-card', 'team-participant-card--' .. variant},
+		classes = {'team-participant-card'},
 	}
 
-	if variant == 'expanded' then
-		collapsible.props.titleWidget = Div{
-			children = {
-				header,
-				qualifierBox
-			}
+	collapsible.props.titleWidget = Div{
+		children = {
+			header,
+			qualifierBoxHeader
 		}
-		collapsible.props.children = content
-	else
-		collapsible.props.titleWidget = header
-		if qualifierBox then
-			table.insert(content, 1, qualifierBox)
-		end
-		collapsible.props.children = content
-	end
+	}
+	table.insert(content, 1, qualifierBoxContent)
+	collapsible.props.children = content
 
 	return collapsible
 end
 
 ---@private
 ---@param participant TeamParticipantsEntity
+---@param location string
 ---@return Widget?
-function ParticipantsTeamCard:_renderQualifierBox(participant)
+function ParticipantsTeamCard:_renderQualifierBox(participant, location)
 	-- TODO: Implement qualifier box content based on figma
 	if participant.qualifierPage or participant.qualifierUrl or participant.qualifierText then
 		return Div{
-			classes = {'team-participant-card-qualifier'},
+			classes = {'team-participant-card-qualifier', 'team-participant-card-qualifier--' .. location},
 			children = {'Qualifier Info Box Placeholder'}
 		}
 	end

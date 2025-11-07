@@ -24,40 +24,7 @@ local ParticipantsTeamHeader = Class.new(Widget)
 function ParticipantsTeamHeader:render()
     local participant = self.props.participant
 	local labelDiv = self:_renderLabel(participant)
-	local variant = self.props.variant or 'compact'
 
-	if variant == 'expanded' then
-		return self:_renderExpanded(participant, labelDiv)
-	end
-
-	return self:_renderCompact(participant, labelDiv)
-end
-
----@private
----@param participant TeamParticipantsEntity
----@param labelDiv Widget?
----@return Widget
-function ParticipantsTeamHeader:_renderCompact(participant, labelDiv)
-	return Div{
-		classes = { 'team-participant-card-header' },
-		children = WidgetUtil.collect(
-			OpponentDisplay.BlockOpponent{
-				opponent = participant.opponent,
-				overflow = 'ellipsis',
-				teamStyle = 'standard',
-				additionalClasses = {'team-participant-card-header-opponent', 'team-participant-square-icon'},
-			},
-			labelDiv,
-			ChevronToggle{}
-		)
-	}
-end
-
----@private
----@param participant TeamParticipantsEntity
----@param labelDiv Widget?
----@return Widget
-function ParticipantsTeamHeader:_renderExpanded(participant, labelDiv)
 	local opponentDisplay = OpponentDisplay.BlockOpponent{
 		opponent = participant.opponent,
 		teamStyle = 'standard',
@@ -65,7 +32,7 @@ function ParticipantsTeamHeader:_renderExpanded(participant, labelDiv)
 	}
 
 	return Div{
-		classes = { 'team-participant-card-header', 'team-participant-card-header--expanded' },
+		classes = { 'team-participant-card-header' },
 		children = {
 			Div{
 				classes = {'team-participant-card-header__main'},
